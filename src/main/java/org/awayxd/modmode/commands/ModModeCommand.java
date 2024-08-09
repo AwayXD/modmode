@@ -22,8 +22,9 @@ import java.util.UUID;
 
 public class ModModeCommand implements CommandExecutor {
 
-    private final Set<UUID> modModePlayers = new HashSet<>();
+    private final Set<UUID> modModePlayers = ModModePlugin.getInstance().getModModePlayers();
     private final Map<UUID, ItemStack[]> storedInventories = new HashMap<>();
+    private final Map<UUID, GameMode> originalGameModes = new HashMap<>(); // Store original game modes
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -54,22 +55,50 @@ public class ModModeCommand implements CommandExecutor {
 
         // Store the player's inventory
         storedInventories.put(playerId, player.getInventory().getContents());
+
+        // Store the player's original game mode and set to CREATIVE
+        originalGameModes.put(playerId, player.getGameMode());
+        player.setGameMode(GameMode.CREATIVE);
+
+        // Clear the player's inventory
         player.getInventory().clear();
 
-        // Make the player invisible
+        // Update visibility for each player
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            onlinePlayer.hidePlayer(ModModePlugin.getInstance(), player);
+            if (onlinePlayer.hasPermission("modmode.use") || onlinePlayer.equals(player)) {
+                // Staff and the player in mod mode can see each other
+                onlinePlayer.showPlayer(ModModePlugin.getInstance(), player);
+                player.showPlayer(ModModePlugin.getInstance(), onlinePlayer);
+            } else {
+                // Regular players cannot see mod mode players
+                onlinePlayer.hidePlayer(ModModePlugin.getInstance(), player);
+            }
         }
+
+        // Make the player invisible to non-staff players
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
         player.setPlayerListName(null); // Remove player from the tab list
 
-        // Give the player an ice block
-        player.setGameMode(GameMode.CREATIVE);
+        // Give the player items for mod mode, centered in the hotbar
         ItemStack iceBlock = new ItemStack(Material.ICE);
-        ItemMeta meta = iceBlock.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + "Freeze Player");
-        iceBlock.setItemMeta(meta);
-        player.getInventory().addItem(iceBlock);
+        ItemMeta iceMeta = iceBlock.getItemMeta();
+        iceMeta.setDisplayName(ChatColor.AQUA + "Freeze Player");
+        iceBlock.setItemMeta(iceMeta);
+        player.getInventory().setItem(4, iceBlock); // Centered in the hotbar
+
+        ItemStack viewInventoryItem = new ItemStack(Material.GHAST_TEAR);
+        ItemMeta viewMeta = viewInventoryItem.getItemMeta();
+        viewMeta.setDisplayName(ChatColor.AQUA + "View Inventory");
+        viewInventoryItem.setItemMeta(viewMeta);
+        player.getInventory().setItem(3, viewInventoryItem); // Adjust position as needed
+
+        ItemStack increaseFlySpeedItem = new ItemStack(Material.SUGAR);
+        ItemMeta increaseMeta = increaseFlySpeedItem.getItemMeta();
+        increaseMeta.setDisplayName(ChatColor.GREEN + "Fly Speed");
+        increaseFlySpeedItem.setItemMeta(increaseMeta);
+        player.getInventory().setItem(5, increaseFlySpeedItem); // Adjust position as needed
+
+        // Removed the stick item
 
         player.sendMessage(ChatColor.GREEN + "Mod mode enabled.");
     }
@@ -84,17 +113,24 @@ public class ModModeCommand implements CommandExecutor {
             player.getInventory().setContents(storedInventory);
         }
 
-        // Make the player visible again
+        // Restore the player's original game mode
+        GameMode originalGameMode = originalGameModes.remove(playerId);
+        if (originalGameMode != null) {
+            player.setGameMode(originalGameMode);
+        }
+
+        // Make the player visible again to all
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             onlinePlayer.showPlayer(ModModePlugin.getInstance(), player);
         }
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
         player.setPlayerListName(player.getName()); // Add player back to the tab list
 
-        // Remove the ice block
+        // Remove mod mode items
         player.getInventory().remove(Material.ICE);
+        player.getInventory().remove(Material.GHAST_TEAR);
+        player.getInventory().remove(Material.SUGAR);
 
         player.sendMessage(ChatColor.RED + "Mod mode disabled.");
-        player.setGameMode(GameMode.SURVIVAL);
     }
 }

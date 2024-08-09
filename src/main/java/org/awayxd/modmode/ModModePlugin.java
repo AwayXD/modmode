@@ -1,14 +1,10 @@
 package org.awayxd.modmode;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.awayxd.modmode.commands.ModModeCommand;
-import org.awayxd.modmode.commands.FreezeCommand;
-import org.awayxd.modmode.commands.UnfreezeCommand;
+import org.awayxd.modmode.commands.*;
+import org.awayxd.modmode.listeners.PlayerDropPickupListener;
 import org.awayxd.modmode.listeners.PlayerInteractListener;
 import org.awayxd.modmode.listeners.PlayerMoveListener;
-import org.awayxd.modmode.listeners.PlayerDropPickupListener;
-import org.awayxd.modmode.commands.InvSeeCommand;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +21,13 @@ public class ModModePlugin extends JavaPlugin {
         instance = this;
         interactListener = new PlayerInteractListener();
 
-        if (getCommand("modmode") == null || getCommand("freeze") == null || getCommand("unfreeze") == null) {
+        // Register command executors
+        if (getCommand("modmode") == null ||
+                getCommand("freeze") == null ||
+                getCommand("unfreeze") == null ||
+                getCommand("invsee") == null ||
+                getCommand("staffchat") == null ||
+                getCommand("smite") == null) {
             getLogger().severe("Commands are not registered in plugin.yml");
             getServer().getPluginManager().disablePlugin(this);
             return;
@@ -34,7 +36,11 @@ public class ModModePlugin extends JavaPlugin {
         this.getCommand("modmode").setExecutor(new ModModeCommand());
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("unfreeze").setExecutor(new UnfreezeCommand());
+        this.getCommand("invsee").setExecutor(new InvseeCommand());
+        this.getCommand("staffchat").setExecutor(new StaffChatCommand());
+        this.getCommand("smite").setExecutor(new SmiteCommand());
 
+        // Register event listeners
         getServer().getPluginManager().registerEvents(interactListener, this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDropPickupListener(), this);
