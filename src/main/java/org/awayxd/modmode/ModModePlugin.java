@@ -38,7 +38,7 @@ public class ModModePlugin extends JavaPlugin {
             return;
         }
 
-        this.getCommand("modmode").setExecutor(new ModModeCommand());
+        this.getCommand("mod").setExecutor(new ModModeCommand());
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("unfreeze").setExecutor(new UnfreezeCommand());
         this.getCommand("invsee").setExecutor(new InvseeCommand());
