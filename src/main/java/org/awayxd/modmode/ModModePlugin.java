@@ -27,7 +27,7 @@ public class ModModePlugin extends JavaPlugin {
         interactListener = new PlayerInteractListener();
 
         // Register command executors
-        if (getCommand("modmode") == null ||
+        if (getCommand("mod") == null ||
                 getCommand("freeze") == null ||
                 getCommand("unfreeze") == null ||
                 getCommand("invsee") == null ||
