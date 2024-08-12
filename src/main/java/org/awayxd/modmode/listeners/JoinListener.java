@@ -28,13 +28,4 @@ public class JoinListener implements Listener {
             }
         }
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onChat(AsyncPlayerChatEvent event) {
-        Player p = event.getPlayer();
-        if (p.hasPermission("daxel.staff")) {
-            if (event.getMessage().startsWith("# ")) {
-                p.performCommand("staffchat " + event.getMessage().replace("# ", ""));
-            }
-        }
-    }
 }
