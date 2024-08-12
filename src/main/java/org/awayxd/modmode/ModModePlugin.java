@@ -1,9 +1,12 @@
 package org.awayxd.modmode;
 
+import net.luckperms.api.LuckPerms;
 import org.awayxd.modmode.commands.*;
 import org.awayxd.modmode.listeners.PlayerDropPickupListener;
 import org.awayxd.modmode.listeners.PlayerInteractListener;
 import org.awayxd.modmode.listeners.PlayerMoveListener;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
@@ -16,6 +19,7 @@ public class ModModePlugin extends JavaPlugin {
     private PlayerInteractListener interactListener;
     private final Set<UUID> modModePlayers = new HashSet<>();
 
+    private LuckPerms api;
     @Override
     public void onEnable() {
         instance = this;
@@ -46,6 +50,11 @@ public class ModModePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerDropPickupListener(), this);
 
         getLogger().info("ModModePlugin has been enabled.");
+
+        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if (provider != null) {
+            api = provider.getProvider();
+        }
     }
 
     @Override
@@ -53,6 +62,10 @@ public class ModModePlugin extends JavaPlugin {
         getLogger().info("ModModePlugin has been disabled.");
     }
 
+
+    public LuckPerms getLuckPerms() {
+        return api;
+    }
     public static ModModePlugin getInstance() {
         return instance;
     }
