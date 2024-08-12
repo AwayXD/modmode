@@ -2,6 +2,7 @@ package org.awayxd.modmode;
 
 import net.luckperms.api.LuckPerms;
 import org.awayxd.modmode.commands.*;
+import org.awayxd.modmode.listeners.JoinListener;
 import org.awayxd.modmode.listeners.PlayerDropPickupListener;
 import org.awayxd.modmode.listeners.PlayerInteractListener;
 import org.awayxd.modmode.listeners.PlayerMoveListener;
@@ -49,6 +50,7 @@ public class ModModePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(interactListener, this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDropPickupListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
         getLogger().info("ModModePlugin has been enabled!");
 

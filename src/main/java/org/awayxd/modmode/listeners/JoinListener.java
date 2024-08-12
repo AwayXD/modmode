@@ -6,7 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinListener implements Listener {
@@ -23,6 +25,15 @@ public class JoinListener implements Listener {
                 User user = plugin.getLuckPerms().getUserManager().getUser(p.getUniqueId());
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                         "&5&l[ѕᴛᴀꜰꜰ] &r" + user.getCachedData().getMetaData().getSuffix() + p.getName() + " &7ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ &5&lѕᴍᴘ"));
+            }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onChat(AsyncPlayerChatEvent event) {
+        Player p = event.getPlayer();
+        if (p.hasPermission("daxel.staff")) {
+            if (event.getMessage().startsWith("# ")) {
+                p.performCommand("staffchat " + event.getMessage().replace("# ", ""));
             }
         }
     }
