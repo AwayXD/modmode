@@ -22,7 +22,7 @@ public class JoinListener implements Listener {
             if (player.hasPermission("daxel.staff")) {
                 User user = plugin.getLuckPerms().getUserManager().getUser(p.getUniqueId());
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        "&c[Staff] " + user.getCachedData().getMetaData().getSuffix() + p.getName() + " &7connected to &cSMP"));
+                        "&4&l[ѕᴛᴀꜰꜰ] &r" + user.getCachedData().getMetaData().getSuffix() + p.getName() + " &7connected to &4&lѕᴍᴘ"));
             }
         }
     }
