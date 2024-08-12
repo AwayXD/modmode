@@ -36,7 +36,7 @@ public class JoinListener implements Listener {
             if (player.hasPermission("daxel.staff")) {
                 User user = plugin.getLuckPerms().getUserManager().getUser(p.getUniqueId());
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        "&5&l[ѕᴛᴀꜰꜰ] &r" + user.getCachedData().getMetaData().getSuffix() + p.getName() + " &7ᴅɪѕᴄᴏɴɴᴇᴄᴛᴇᴅ ꜰʀᴏᴍ  &5&lѕᴍᴘ"));
+                        "&5&l[ѕᴛᴀꜰꜰ] &r" + user.getCachedData().getMetaData().getSuffix() + p.getName() + " &7ᴅɪѕᴄᴏɴɴᴇᴄᴛᴇᴅ ꜰʀᴏᴍ &5&lѕᴍᴘ"));
             }
         }
     }
