@@ -27,19 +27,6 @@ public class ModModePlugin extends JavaPlugin {
         instance = this;
         interactListener = new PlayerInteractListener();
 
-        // Register command executors
-        if (getCommand("mod") == null ||
-                getCommand("freeze") == null ||
-                getCommand("unfreeze") == null ||
-                getCommand("invsee") == null ||
-                getCommand("staffchat") == null ||
-                getCommand("alts") == null ||
-                getCommand("smite") == null) {
-            getLogger().severe("Commands are not registered in plugin.yml");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         this.getCommand("mod").setExecutor(new ModModeCommand());
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("unfreeze").setExecutor(new UnfreezeCommand());
