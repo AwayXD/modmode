@@ -13,8 +13,8 @@ commands:
     description: Opens another player's inventory
   staffchat:
     description: Sends a message to the staff chat
-    alts:
-      description: checks a player for other accounts on the same ip
+  alts:
+    description: checks a player for other accounts on the same ip
   smite:
     description: Smite a player
 
