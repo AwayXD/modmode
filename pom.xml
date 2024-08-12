@@ -59,6 +59,11 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <!-- Add the GlowUtil repository if needed -->
+        <repository>
+            <id>glowutil-repo</id>
+            <url>http://repository.url/for/glowutil/</url>
+        </repository>
     </repositories>
 
     <dependencies>

@@ -22,6 +22,9 @@ public class PlayerInteractListener implements Listener {
     private final Map<UUID, UUID> frozenPlayers = new HashMap<>();
     private final Map<UUID, Long> freezeEndTimes = new HashMap<>();
     private final Map<UUID, Float> playerFlySpeeds = new HashMap<>(); // Store player fly speeds
+    private final Map<UUID, Long> lastInventoryOpenTimes = new HashMap<>(); // Track last inventory open time
+
+    private static final long INVENTORY_OPEN_COOLDOWN_MS = 1000; // 1 second cooldown
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
@@ -56,11 +59,17 @@ public class PlayerInteractListener implements Listener {
         }
 
         // Check if the item is not null and handle it
-        if (item != null && item.getType() == Material.SUGAR) {
-            if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                increaseFlySpeed(player);
-            } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                decreaseFlySpeed(player);
+        if (item != null) {
+            Material itemType = item.getType();
+
+            if (itemType == Material.SUGAR) {
+                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    increaseFlySpeed(player);
+                } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                    decreaseFlySpeed(player);
+                }
+            } else if (itemType == Material.POTION) {
+                toggleNightVision(player);
             }
         }
     }
@@ -68,9 +77,18 @@ public class PlayerInteractListener implements Listener {
     private void handleGhastTearInteraction(Player player, PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof Player) {
             Player target = (Player) event.getRightClicked();
-            if (!target.equals(player)) { // Ensure the player isn't trying to open their own inventory
-                player.openInventory(target.getInventory()); // Open the target player's inventory
-                player.sendMessage(ChatColor.GREEN + "Opened " + target.getName() + "'s inventory.");
+            UUID playerId = player.getUniqueId();
+            UUID targetId = target.getUniqueId();
+
+            long currentTime = System.currentTimeMillis();
+            long lastOpenTime = lastInventoryOpenTimes.getOrDefault(playerId, 0L);
+
+            if (currentTime - lastOpenTime >= INVENTORY_OPEN_COOLDOWN_MS) {
+                if (!target.equals(player)) { // Ensure the player isn't trying to open their own inventory
+                    player.openInventory(target.getInventory()); // Open the target player's inventory
+                    player.sendMessage(ChatColor.GREEN + "Opened " + target.getName() + "'s inventory.");
+                    lastInventoryOpenTimes.put(playerId, currentTime); // Update the last open time
+                }
             }
         }
     }
@@ -111,6 +129,18 @@ public class PlayerInteractListener implements Listener {
             player.sendMessage(ChatColor.RED + "Fly speed decreased to " + (newSpeed * 10));
         } else {
             player.sendMessage(ChatColor.RED + "Fly speed is already at minimum.");
+        }
+    }
+
+
+    private void toggleNightVision(Player player) {
+        boolean hasNightVision = player.hasPotionEffect(PotionEffectType.NIGHT_VISION);
+        if (hasNightVision) {
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            player.sendMessage(ChatColor.RED + "Night vision disabled.");
+        } else {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
+            player.sendMessage(ChatColor.GREEN + "Night vision enabled.");
         }
     }
 
