@@ -42,7 +42,7 @@ public class ModModePlugin extends JavaPlugin {
         this.getCommand("freeze").setExecutor(new FreezeCommand());
         this.getCommand("unfreeze").setExecutor(new UnfreezeCommand());
         this.getCommand("invsee").setExecutor(new InvseeCommand());
-        this.getCommand("staffchat").setExecutor(new StaffChatCommand(plugin));
+        this.getCommand("staffchat").setExecutor(new StaffChatCommand(this));
         this.getCommand("smite").setExecutor(new SmiteCommand());
 
         // Register event listeners
