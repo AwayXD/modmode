@@ -1,6 +1,7 @@
 package org.awayxd.modmode.listeners;
 
 import org.awayxd.modmode.ModModePlugin;
+import org.awayxd.modmode.commands.ModModeCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,6 +26,8 @@ public class PlayerInteractListener implements Listener {
     private final Map<UUID, Long> lastInventoryOpenTimes = new HashMap<>(); // Track last inventory open time
 
     private static final long INVENTORY_OPEN_COOLDOWN_MS = 1000; // 1 second cooldown
+
+    private final ModModeCommand modModeCommand = new ModModeCommand(); // Initialize ModModeCommand instance
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
@@ -70,6 +73,11 @@ public class PlayerInteractListener implements Listener {
                 }
             } else if (itemType == Material.POTION) {
                 toggleNightVision(player);
+            } else if (itemType == Material.GRASS_BLOCK) {
+                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    modModeCommand.handleBlockBreakItemClick(player);
+                    event.setCancelled(true); // Prevent other actions from occurring
+                }
             }
         }
     }
@@ -131,7 +139,6 @@ public class PlayerInteractListener implements Listener {
             player.sendMessage(ChatColor.RED + "Fly speed is already at minimum.");
         }
     }
-
 
     private void toggleNightVision(Player player) {
         boolean hasNightVision = player.hasPotionEffect(PotionEffectType.NIGHT_VISION);
