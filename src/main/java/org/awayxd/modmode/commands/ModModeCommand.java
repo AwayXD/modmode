@@ -39,8 +39,19 @@ public class ModModeCommand implements CommandExecutor {
             return true;
         }
 
-        UUID playerId = player.getUniqueId();
-        if (modModePlayers.contains(playerId)) {
+        // Check for command arguments
+        if (args.length > 0) {
+            if (args[0].equalsIgnoreCase("nightvision")) {
+                toggleNightVision(player);
+                return true;
+            }
+
+            player.sendMessage(ChatColor.RED + "Unknown sub-command. Valid sub-command: nightvision.");
+            return true;
+        }
+
+        // Toggle mod mode
+        if (modModePlayers.contains(player.getUniqueId())) {
             disableModMode(player);
         } else {
             enableModMode(player);
@@ -98,7 +109,12 @@ public class ModModeCommand implements CommandExecutor {
         increaseFlySpeedItem.setItemMeta(increaseMeta);
         player.getInventory().setItem(5, increaseFlySpeedItem); // Adjust position as needed
 
-        // Removed the stick item
+        // Night vision toggle item
+        ItemStack nightVisionItem = new ItemStack(Material.POTION);
+        ItemMeta nightVisionMeta = nightVisionItem.getItemMeta();
+        nightVisionMeta.setDisplayName(ChatColor.BLUE + "Toggle Night Vision");
+        nightVisionItem.setItemMeta(nightVisionMeta);
+        player.getInventory().setItem(6, nightVisionItem); // Adjust position as needed
 
         player.sendMessage(ChatColor.GREEN + "Mod mode enabled.");
     }
@@ -130,7 +146,19 @@ public class ModModeCommand implements CommandExecutor {
         player.getInventory().remove(Material.ICE);
         player.getInventory().remove(Material.GHAST_TEAR);
         player.getInventory().remove(Material.SUGAR);
+        player.getInventory().remove(Material.POTION);
 
         player.sendMessage(ChatColor.RED + "Mod mode disabled.");
+    }
+
+    private void toggleNightVision(Player player) {
+        boolean hasNightVision = player.hasPotionEffect(PotionEffectType.NIGHT_VISION);
+        if (hasNightVision) {
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            player.sendMessage(ChatColor.RED + "Night vision disabled.");
+        } else {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
+            player.sendMessage(ChatColor.GREEN + "Night vision enabled.");
+        }
     }
 }

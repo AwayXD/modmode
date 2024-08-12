@@ -1,18 +1,33 @@
 name: ModModePlugin
-version: 1.3
+version: 1.5
 main: org.awayxd.modmode.ModModePlugin
 api-version: 1.21
 commands:
   mod:
-    description: Enables or disables mod mode
+    description: Toggles mod mode.
+    usage: /mod
+    permission: modmode.use
   freeze:
-    description: Freezes a player
+    description: Freezes a player in place.
+    usage: /freeze <player>
+    permission: modmode.freeze
   unfreeze:
-    description: Unfreezes a player
+    description: Unfreezes a player.
+    usage: /unfreeze <player>
+    permission: modmode.freeze
   invsee:
-    description: Opens another player's inventory
+    description: Allows staff to view a player's inventory.
+    usage: /invsee <player>
+    permission: modmode.invsee
   staffchat:
-    description: Sends a message to the staff chat
+    description: Toggles staff chat mode.
+    usage: /staffchat
+    permission: modmode.staffchat
   smite:
-    description: Smite a player
-
+    description: Smites a player with lightning.
+    usage: /smite <player>
+    permission: modmode.smite
+  checkalts:
+    description: Checks for alternate accounts associated with a player's IP.
+    usage: /checkalts <player>
+    permission: modmode.checkalts
