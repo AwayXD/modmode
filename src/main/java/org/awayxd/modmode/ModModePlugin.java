@@ -33,6 +33,7 @@ public class ModModePlugin extends JavaPlugin {
                 getCommand("unfreeze") == null ||
                 getCommand("invsee") == null ||
                 getCommand("staffchat") == null ||
+                getCommand("alts") == null ||
                 getCommand("smite") == null) {
             getLogger().severe("Commands are not registered in plugin.yml");
             getServer().getPluginManager().disablePlugin(this);
@@ -44,6 +45,7 @@ public class ModModePlugin extends JavaPlugin {
         this.getCommand("unfreeze").setExecutor(new UnfreezeCommand());
         this.getCommand("invsee").setExecutor(new InvseeCommand());
         this.getCommand("staffchat").setExecutor(new StaffChatCommand(this));
+        this.getCommand("alts").setExecutor(new CheckAltsCommand(this));
         this.getCommand("smite").setExecutor(new SmiteCommand());
 
         // Register event listeners
