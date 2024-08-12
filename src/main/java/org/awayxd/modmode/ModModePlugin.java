@@ -50,7 +50,7 @@ public class ModModePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDropPickupListener(), this);
 
-        getLogger().info("ModModePlugin has been enabled.");
+        getLogger().info("ModModePlugin has been enabled!");
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
