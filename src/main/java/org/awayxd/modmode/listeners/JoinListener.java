@@ -19,11 +19,13 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         e.setJoinMessage("");
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission("daxel.staff")) {
-                User user = plugin.getLuckPerms().getUserManager().getUser(p.getUniqueId());
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        "&5&l[ѕᴛᴀꜰꜰ] &r" + user.getCachedData().getMetaData().getSuffix() + p.getName() + " &7ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ &5&lѕᴍᴘ"));
+        if (p.hasPermission("daxel.staff")) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.hasPermission("daxel.staff")) {
+                    User user = plugin.getLuckPerms().getUserManager().getUser(p.getUniqueId());
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            "&5&l[ѕᴛᴀꜰꜰ] &r" + user.getCachedData().getMetaData().getSuffix() + p.getName() + " &7ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ &5&lѕᴍᴘ"));
+                }
             }
         }
     }
