@@ -120,7 +120,6 @@ public class ModModeCommand implements CommandExecutor {
         // Set block breaking enabled by default
         blockBreakingEnabled.put(playerId, true);
 
-        player.sendMessage(ChatColor.GREEN + "Mod mode enabled.");
         announcerListener.enableModModeAnnounce(player); // Announce when entering mod mode
     }
 
@@ -157,7 +156,6 @@ public class ModModeCommand implements CommandExecutor {
         // Remove block-breaking state
         blockBreakingEnabled.remove(playerId);
 
-        player.sendMessage(ChatColor.RED + "Mod mode disabled.");
         announcerListener.disableModModeAnnounce(player); // Announce when exiting mod mode
     }
 
