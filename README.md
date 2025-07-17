@@ -66,7 +66,7 @@ Located in `config.yml`:
 - Java Version: 17+
 - API: Spigot / Paper 1.21
 - Plugin Type: Staff Moderation Utility
-- Plugin File: `ModModePlugin.java` 
+- Main Class: `ModModePlugin.java` 
 
 ## Installation
 
